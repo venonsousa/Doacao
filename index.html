@@ -134,6 +134,7 @@ canvas {
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 /* NUMERAÇÃO AUTOMÁTICA */
@@ -162,6 +163,13 @@ canvas {
   font-size: 16px;
   text-align: center;
 }
+
+.card img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
 </style>
 </head>
 <body>
@@ -171,7 +179,7 @@ canvas {
 <!-- MENU -->
 <div class="sidebar">
   <div class="profile">
-    <img src="https://xatimg.com/image/9ED7TkP93b9y.gif" alt="Foto de Perfil">
+    <img src="https://i.pravatar.cc/150" alt="Foto de Perfil">
     <h2 class="gradient-text">iiCarvaozim</h2>
     <p class="gradient-text">Dev • Criador • Designer</p>
   </div>
@@ -198,7 +206,7 @@ canvas {
 <!-- PAINEL -->
 <div class="panel" id="panel">
   <div class="grid">
-    <div class="card"><span>Item</span></div>
+    <div class="card" id="card1"><span>Item</span></div>
     <div class="card"><span>Item</span></div>
     <div class="card"><span>Item</span></div>
     <div class="card"><span>Item</span></div>
@@ -227,7 +235,6 @@ function playSound() {
 // FUNÇÃO PCBACK
 function pcBack() {
   alert("Botão PCBACK clicado!");
-  // Aqui você pode adicionar a ação real do PCBACK
 }
 
 // FUNÇÃO FUNDOS ESTÁTICOS
@@ -300,8 +307,10 @@ function animateParticles() {
   particles.forEach(p => { p.update(); p.draw(); });
   requestAnimationFrame(animateParticles);
 }
-
 animateParticles();
+
+// ADICIONAR GIF NO PRIMEIRO CARD
+document.getElementById("card1").innerHTML = '<img src="https://xatimg.com/image/2z709uX4q7li.gif" alt="GIF Fundos">';
 </script>
 
 </body>

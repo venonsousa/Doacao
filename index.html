@@ -22,7 +22,7 @@ canvas {
   z-index: -1;
 }
 
-/* MENU LATERAL */
+/* MENU */
 .sidebar {
   position: fixed;
   left: 0;
@@ -32,7 +32,6 @@ canvas {
   background: rgba(0,0,0,0.7);
   backdrop-filter: blur(10px);
   padding: 20px;
-  box-shadow: 2px 0 20px rgba(0,0,0,0.5);
 }
 
 .profile {
@@ -46,16 +45,7 @@ canvas {
   border: 2px solid #00ffff;
 }
 
-.profile h2 {
-  margin: 10px 0 5px;
-}
-
-.profile p {
-  font-size: 13px;
-  color: #aaa;
-}
-
-/* BOTÃO MENU */
+/* BOTÃO */
 .menu-btn {
   margin-top: 20px;
   padding: 10px;
@@ -67,7 +57,7 @@ canvas {
   cursor: pointer;
 }
 
-/* PAINEL DIREITO */
+/* PAINEL */
 .panel {
   position: fixed;
   right: -100%;
@@ -75,9 +65,8 @@ canvas {
   width: calc(100% - 260px);
   height: 100%;
   background: rgba(10,10,10,0.95);
-  backdrop-filter: blur(10px);
   padding: 30px;
-  transition: 0.5s ease;
+  transition: 0.5s;
   overflow-y: auto;
 }
 
@@ -90,23 +79,39 @@ canvas {
   display: flex;
   flex-wrap: wrap;
   gap: 15px;
+  counter-reset: card;
 }
 
-/* CARDS NOVOS */
+/* CARDS */
 .card {
+  position: relative;
   width: 260px;
   height: 218px;
   background: rgba(255,255,255,0.05);
   border-radius: 15px;
   transition: 0.3s;
-  backdrop-filter: blur(5px);
   border: 1px solid rgba(0,255,255,0.2);
-  cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
+/* NUMERAÇÃO AUTOMÁTICA */
+.card::before {
+  counter-increment: card;
+  content: "#" counter(card);
+  position: absolute;
+  top: 10px;
+  left: 15px;
+  font-size: 14px;
+  color: #00ffff;
+  font-weight: bold;
+  background: rgba(0,255,255,0.1);
+  padding: 5px 10px;
+  border-radius: 10px;
+}
+
+/* HOVER */
 .card:hover {
   transform: scale(1.08);
   box-shadow: 0 0 25px rgba(0,255,255,0.4);
@@ -127,9 +132,9 @@ canvas {
 <!-- MENU -->
 <div class="sidebar">
   <div class="profile">
-    <img src="https://i.pravatar.cc/150" alt="perfil">
+    <img src="https://i.pravatar.cc/150">
     <h2>Seu Nome</h2>
-    <p>Desenvolvedor • Criador • Designer</p>
+    <p>Dev • Criador • Designer</p>
   </div>
 
   <button class="menu-btn" onclick="togglePanel()">Abrir Menu</button>
@@ -138,14 +143,18 @@ canvas {
 <!-- PAINEL -->
 <div class="panel" id="panel">
   <div class="grid">
-    <div class="card"><span>Card 1</span></div>
-    <div class="card"><span>Card 2</span></div>
-    <div class="card"><span>Card 3</span></div>
-    <div class="card"><span>Card 4</span></div>
-    <div class="card"><span>Card 5</span></div>
-    <div class="card"><span>Card 6</span></div>
-    <div class="card"><span>Card 7</span></div>
-    <div class="card"><span>Card 8</span></div>
+
+    <div class="card"><span>Item</span></div>
+    <div class="card"><span>Item</span></div>
+    <div class="card"><span>Item</span></div>
+    <div class="card"><span>Item</span></div>
+    <div class="card"><span>Item</span></div>
+    <div class="card"><span>Item</span></div>
+    <div class="card"><span>Item</span></div>
+    <div class="card"><span>Item</span></div>
+    <div class="card"><span>Item</span></div>
+    <div class="card"><span>Item</span></div>
+
   </div>
 </div>
 

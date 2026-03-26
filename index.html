@@ -85,23 +85,26 @@ canvas {
   right: 0;
 }
 
-/* GRID DE CARDS */
+/* GRID */
 .grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 15px;
 }
 
-/* CARDS */
+/* CARDS NOVOS */
 .card {
-  width: 390px;
-  height: 315px;
+  width: 260px;
+  height: 218px;
   background: rgba(255,255,255,0.05);
   border-radius: 15px;
   transition: 0.3s;
   backdrop-filter: blur(5px);
   border: 1px solid rgba(0,255,255,0.2);
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .card:hover {
@@ -109,13 +112,9 @@ canvas {
   box-shadow: 0 0 25px rgba(0,255,255,0.4);
 }
 
-/* TEXTO CENTRAL */
+/* TEXTO */
 .card span {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 </style>
@@ -145,16 +144,18 @@ canvas {
     <div class="card"><span>Card 4</span></div>
     <div class="card"><span>Card 5</span></div>
     <div class="card"><span>Card 6</span></div>
+    <div class="card"><span>Card 7</span></div>
+    <div class="card"><span>Card 8</span></div>
   </div>
 </div>
 
 <script>
-// ABRIR MENU
+// MENU
 function togglePanel() {
   document.getElementById("panel").classList.toggle("active");
 }
 
-// CANVAS (partículas)
+// CANVAS
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 

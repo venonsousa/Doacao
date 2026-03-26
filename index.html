@@ -13,6 +13,7 @@ body {
   overflow: hidden;
 }
 
+/* CANVAS */
 canvas {
   position: fixed;
   top: 0;
@@ -20,6 +21,7 @@ canvas {
   z-index: -1;
 }
 
+/* SIDEBAR */
 .sidebar {
   position: fixed;
   left: 0;
@@ -50,6 +52,7 @@ canvas {
   display: inline-block;
 }
 
+/* BOTÕES */
 .menu-btn {
   margin-top: 20px;
   padding: 12px;
@@ -88,6 +91,7 @@ canvas {
   box-shadow: 0 0 15px #00ffff, 0 0 30px #00ffff inset;
 }
 
+/* PAINÉIS */
 .panel {
   position: fixed;
   right: -100%;
@@ -106,6 +110,7 @@ canvas {
   right: 0;
 }
 
+/* GRID */
 .grid {
   display: flex;
   flex-wrap: wrap;
@@ -210,6 +215,7 @@ canvas {
   </button>
 </div>
 
+<!-- PAINEL FUNDOS GFS -->
 <div class="panel" id="panelGFS">
   <div class="grid">
     <div class="card" id="cardGFS1"><span>Item</span></div>
@@ -219,6 +225,7 @@ canvas {
   </div>
 </div>
 
+<!-- PAINEL FUNDOS ESTÁTICOS -->
 <div class="panel" id="panelStatic">
   <div class="grid">
     <div class="card"><span>Item</span></div>
@@ -235,33 +242,33 @@ canvas {
 </div>
 
 <script>
+// SOM
 function playSound() {
   const audio = new Audio("https://freesound.org/data/previews/341/341695_6245054-lq.mp3");
   audio.volume = 0.3;
   audio.play();
 }
 
+// PCBACK
 function pcBack() {
   document.getElementById("panelGFS").classList.remove("active");
   document.getElementById("panelStatic").classList.remove("active");
 }
 
-// ABRIR FUNDOS GFS
+// FUNDOS GFS
 function openGFS() {
   document.getElementById("panelGFS").classList.add("active");
   document.getElementById("panelStatic").classList.remove("active");
 
-  // Coloca GIF no primeiro card
   const card = document.getElementById("cardGFS1");
   card.innerHTML = '<img src="https://xatimg.com/image/2z709uX4q7li.gif" alt="GIF Fundos">';
   
-  // Adiciona click para abrir modal
   card.onclick = function() {
     openModal("https://xatimg.com/image/2z709uX4q7li.gif");
   };
 }
 
-// ABRIR FUNDOS ESTÁTICOS
+// FUNDOS ESTÁTICOS
 function openStatic() {
   document.getElementById("panelStatic").classList.add("active");
   document.getElementById("panelGFS").classList.remove("active");
@@ -273,7 +280,6 @@ function openModal(src) {
   document.getElementById("modal").style.display = "flex";
   document.getElementById("modalImg").src = src;
 }
-
 function closeModal() {
   document.getElementById("modal").style.display = "none";
 }

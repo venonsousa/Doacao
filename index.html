@@ -94,7 +94,7 @@ canvas {
   box-shadow: 0 0 15px #00ffff, 0 0 30px #00ffff inset;
 }
 
-/* PAINEL */
+/* PAINÉIS */
 .panel {
   position: fixed;
   right: -100%;
@@ -137,7 +137,6 @@ canvas {
   overflow: hidden;
 }
 
-/* NUMERAÇÃO AUTOMÁTICA */
 .card::before {
   counter-increment: card;
   content: "#" counter(card);
@@ -152,13 +151,11 @@ canvas {
   border-radius: 10px;
 }
 
-/* HOVER */
 .card:hover {
   transform: scale(1.08);
   box-shadow: 0 0 25px rgba(0,255,255,0.4);
 }
 
-/* TEXTO */
 .card span {
   font-size: 16px;
   text-align: center;
@@ -184,34 +181,35 @@ canvas {
     <p class="gradient-text">Dev • Criador • Designer</p>
   </div>
 
-  <!-- BOTÃO FUNDOS GFS -->
-  <button class="menu-btn" onclick="togglePanel(); playSound(); initParticles();">
+  <button class="menu-btn" onclick="openGFS(); playSound();">
     <div class="icon" aria-hidden="true"></div>
     FUNDOS GFS
   </button>
 
-  <!-- BOTÃO PCBACK -->
   <button class="menu-btn" onclick="pcBack();">
     <div class="icon" aria-hidden="true"></div>
     PCBACK
   </button>
 
-  <!-- BOTÃO FUNDOS ESTÁTICOS -->
-  <button class="menu-btn" onclick="fundosEstáticos();">
+  <button class="menu-btn" onclick="openStatic();">
     <div class="icon" aria-hidden="true"></div>
     FUNDOS ESTÁTICOS
   </button>
 </div>
 
-<!-- PAINEL -->
-<div class="panel" id="panel">
+<!-- PAINEL FUNDOS GFS -->
+<div class="panel" id="panelGFS">
   <div class="grid">
-    <div class="card" id="card1"><span>Item</span></div>
+    <div class="card" id="cardGFS1"><span>Item</span></div>
     <div class="card"><span>Item</span></div>
     <div class="card"><span>Item</span></div>
     <div class="card"><span>Item</span></div>
-    <div class="card"><span>Item</span></div>
-    <div class="card"><span>Item</span></div>
+  </div>
+</div>
+
+<!-- PAINEL FUNDOS ESTÁTICOS -->
+<div class="panel" id="panelStatic">
+  <div class="grid">
     <div class="card"><span>Item</span></div>
     <div class="card"><span>Item</span></div>
     <div class="card"><span>Item</span></div>
@@ -220,11 +218,6 @@ canvas {
 </div>
 
 <script>
-// MENU
-function togglePanel() {
-  document.getElementById("panel").classList.toggle("active");
-}
-
 // SOM AO CLICAR
 function playSound() {
   const audio = new Audio("https://freesound.org/data/previews/341/341695_6245054-lq.mp3");
@@ -232,15 +225,25 @@ function playSound() {
   audio.play();
 }
 
-// FUNÇÃO PCBACK
+// BOTÃO PCBACK
 function pcBack() {
-  alert("Botão PCBACK clicado!");
+  document.getElementById("panelGFS").classList.remove("active");
+  document.getElementById("panelStatic").classList.remove("active");
 }
 
-// FUNÇÃO FUNDOS ESTÁTICOS
-function fundosEstáticos() {
-  const panel = document.getElementById("panel");
-  panel.classList.add("active"); // abre painel se fechado
+// ABRIR FUNDOS GFS
+function openGFS() {
+  document.getElementById("panelGFS").classList.add("active");
+  document.getElementById("panelStatic").classList.remove("active");
+
+  // Adiciona GIF no primeiro card
+  document.getElementById("cardGFS1").innerHTML = '<img src="https://xatimg.com/image/2z709uX4q7li.gif" alt="GIF Fundos">';
+}
+
+// ABRIR FUNDOS ESTÁTICOS
+function openStatic() {
+  document.getElementById("panelStatic").classList.add("active");
+  document.getElementById("panelGFS").classList.remove("active");
   resetParticlesStatic();
 }
 
@@ -282,15 +285,11 @@ class Particle {
   }
 }
 
-// INICIA PARTICULAS ANIMADAS
 function initParticles(count = 100) {
   particles = [];
-  for (let i = 0; i < count; i++) {
-    particles.push(new Particle());
-  }
+  for (let i = 0; i < count; i++) particles.push(new Particle());
 }
 
-// PARTICULAS ESTÁTICAS
 function resetParticlesStatic(count = 100) {
   particles = [];
   for (let i = 0; i < count; i++) {
@@ -301,17 +300,13 @@ function resetParticlesStatic(count = 100) {
   }
 }
 
-// ANIMAÇÃO
 function animateParticles() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   particles.forEach(p => { p.update(); p.draw(); });
   requestAnimationFrame(animateParticles);
 }
+
 animateParticles();
-
-// ADICIONAR GIF NO PRIMEIRO CARD
-document.getElementById("card1").innerHTML = '<img src="https://xatimg.com/image/2z709uX4q7li.gif" alt="GIF Fundos">';
 </script>
-
 </body>
 </html>

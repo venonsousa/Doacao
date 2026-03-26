@@ -3,33 +3,121 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Canvas Avançado</title>
+<title>Interface Premium</title>
 
 <style>
-  body {
-    margin: 0;
-    overflow: hidden;
-    background: #050505;
-    font-family: Arial, sans-serif;
-    color: white;
-  }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #050505;
+  color: white;
+  overflow: hidden;
+}
 
-  canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-  }
+/* CANVAS */
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
 
-  .content {
-    position: relative;
-    text-align: center;
-    top: 40vh;
-    z-index: 10;
-  }
+/* MENU LATERAL */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 260px;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  box-shadow: 2px 0 20px rgba(0,0,0,0.5);
+}
 
-  h1 {
-    font-size: 40px;
-  }
+.profile {
+  text-align: center;
+}
+
+.profile img {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 2px solid #00ffff;
+}
+
+.profile h2 {
+  margin: 10px 0 5px;
+}
+
+.profile p {
+  font-size: 13px;
+  color: #aaa;
+}
+
+/* BOTÃO MENU */
+.menu-btn {
+  margin-top: 20px;
+  padding: 10px;
+  background: #00ffff;
+  color: black;
+  border: none;
+  width: 100%;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+/* PAINEL DIREITO */
+.panel {
+  position: fixed;
+  right: -100%;
+  top: 0;
+  width: calc(100% - 260px);
+  height: 100%;
+  background: rgba(10,10,10,0.95);
+  backdrop-filter: blur(10px);
+  padding: 30px;
+  transition: 0.5s ease;
+  overflow-y: auto;
+}
+
+.panel.active {
+  right: 0;
+}
+
+/* GRID DE CARDS */
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+/* CARDS */
+.card {
+  width: 390px;
+  height: 315px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 15px;
+  transition: 0.3s;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(0,255,255,0.2);
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 25px rgba(0,255,255,0.4);
+}
+
+/* TEXTO CENTRAL */
+.card span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  font-size: 18px;
+}
+
 </style>
 </head>
 
@@ -37,12 +125,36 @@
 
 <canvas id="canvas"></canvas>
 
-<div class="content">
-  <h1>🔥 Efeito Avançado</h1>
-  <p>Partículas + ondas + rastro do mouse</p>
+<!-- MENU -->
+<div class="sidebar">
+  <div class="profile">
+    <img src="https://i.pravatar.cc/150" alt="perfil">
+    <h2>Seu Nome</h2>
+    <p>Desenvolvedor • Criador • Designer</p>
+  </div>
+
+  <button class="menu-btn" onclick="togglePanel()">Abrir Menu</button>
+</div>
+
+<!-- PAINEL -->
+<div class="panel" id="panel">
+  <div class="grid">
+    <div class="card"><span>Card 1</span></div>
+    <div class="card"><span>Card 2</span></div>
+    <div class="card"><span>Card 3</span></div>
+    <div class="card"><span>Card 4</span></div>
+    <div class="card"><span>Card 5</span></div>
+    <div class="card"><span>Card 6</span></div>
+  </div>
 </div>
 
 <script>
+// ABRIR MENU
+function togglePanel() {
+  document.getElementById("panel").classList.toggle("active");
+}
+
+// CANVAS (partículas)
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
@@ -50,29 +162,14 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 let particles = [];
-let mouseTrail = [];
 
-const mouse = {
-  x: null,
-  y: null
-};
-
-window.addEventListener("mousemove", (e) => {
-  mouse.x = e.x;
-  mouse.y = e.y;
-
-  mouseTrail.push({ x: mouse.x, y: mouse.y });
-  if (mouseTrail.length > 20) mouseTrail.shift();
-});
-
-// Partículas
 class Particle {
   constructor() {
     this.x = Math.random() * canvas.width;
     this.y = Math.random() * canvas.height;
-    this.size = Math.random() * 2 + 1;
-    this.speedX = Math.random() * 1 - 0.5;
-    this.speedY = Math.random() * 1 - 0.5;
+    this.size = Math.random() * 2;
+    this.speedX = Math.random() - 0.5;
+    this.speedY = Math.random() - 0.5;
   }
 
   update() {
@@ -80,9 +177,7 @@ class Particle {
     this.y += this.speedY;
 
     if (this.x > canvas.width) this.x = 0;
-    if (this.x < 0) this.x = canvas.width;
     if (this.y > canvas.height) this.y = 0;
-    if (this.y < 0) this.y = canvas.height;
   }
 
   draw() {
@@ -93,74 +188,20 @@ class Particle {
   }
 }
 
-// Inicializar partículas
 function init() {
   particles = [];
-  for (let i = 0; i < 120; i++) {
+  for (let i = 0; i < 100; i++) {
     particles.push(new Particle());
   }
 }
 
-// Linhas entre partículas
-function connect() {
-  for (let a = 0; a < particles.length; a++) {
-    for (let b = a; b < particles.length; b++) {
-      let dx = particles[a].x - particles[b].x;
-      let dy = particles[a].y - particles[b].y;
-      let dist = dx * dx + dy * dy;
-
-      if (dist < 9000) {
-        ctx.strokeStyle = "rgba(0,255,255,0.08)";
-        ctx.beginPath();
-        ctx.moveTo(particles[a].x, particles[a].y);
-        ctx.lineTo(particles[b].x, particles[b].y);
-        ctx.stroke();
-      }
-    }
-  }
-}
-
-// 🔥 Novo efeito: rastro do mouse
-function drawTrail() {
-  for (let i = 0; i < mouseTrail.length; i++) {
-    let p = mouseTrail[i];
-    ctx.fillStyle = `rgba(0,255,255,${i / 20})`;
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
-    ctx.fill();
-  }
-}
-
-// 🔥 Novo efeito: ondas/glow animado
-let waveOffset = 0;
-
-function drawWave() {
-  ctx.beginPath();
-  ctx.strokeStyle = "rgba(0,255,255,0.15)";
-  ctx.lineWidth = 2;
-
-  for (let x = 0; x < canvas.width; x++) {
-    let y = canvas.height / 2 + Math.sin(x * 0.01 + waveOffset) * 20;
-    ctx.lineTo(x, y);
-  }
-
-  ctx.stroke();
-  waveOffset += 0.03;
-}
-
-// Animação principal
 function animate() {
-  ctx.fillStyle = "rgba(5,5,5,0.3)";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   particles.forEach(p => {
     p.update();
     p.draw();
   });
-
-  connect();
-  drawTrail(); // efeito novo
-  drawWave();  // efeito novo
 
   requestAnimationFrame(animate);
 }
@@ -171,7 +212,6 @@ animate();
 window.addEventListener("resize", () => {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-  init();
 });
 </script>
 

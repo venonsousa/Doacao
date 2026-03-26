@@ -45,16 +45,45 @@ canvas {
   border: 2px solid #00ffff;
 }
 
-/* BOTÃO */
+/* BOTÃO FUNDOS GFS */
 .menu-btn {
   margin-top: 20px;
-  padding: 10px;
-  background: #00ffff;
+  padding: 12px;
+  background: linear-gradient(45deg, #00ffff, #0077ff);
   color: black;
   border: none;
   width: 100%;
   border-radius: 20px;
   cursor: pointer;
+  font-weight: bold;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ÍCONE ANIMADO */
+.menu-btn .icon {
+  margin-right: 10px;
+  width: 20px;
+  height: 20px;
+  border: 2px solid black;
+  border-radius: 50%;
+  border-left: 4px solid black;
+  animation: spin 1s linear infinite;
+}
+
+/* SPIN KEYFRAME */
+@keyframes spin {
+  0% { transform: rotate(0deg);}
+  100% { transform: rotate(360deg);}
+}
+
+/* HOVER NEON */
+.menu-btn:hover {
+  box-shadow: 0 0 15px #00ffff, 0 0 30px #00ffff inset;
 }
 
 /* PAINEL */
@@ -137,13 +166,16 @@ canvas {
     <p>Dev • Criador • Designer</p>
   </div>
 
-  <button class="menu-btn" onclick="togglePanel()">Abrir Menu</button>
+  <!-- BOTÃO COM ÍCONE -->
+  <button class="menu-btn" onclick="togglePanel(); playSound();">
+    <div class="icon"></div>
+    FUNDOS GFS
+  </button>
 </div>
 
 <!-- PAINEL -->
 <div class="panel" id="panel">
   <div class="grid">
-
     <div class="card"><span>Item</span></div>
     <div class="card"><span>Item</span></div>
     <div class="card"><span>Item</span></div>
@@ -154,7 +186,6 @@ canvas {
     <div class="card"><span>Item</span></div>
     <div class="card"><span>Item</span></div>
     <div class="card"><span>Item</span></div>
-
   </div>
 </div>
 
@@ -164,10 +195,16 @@ function togglePanel() {
   document.getElementById("panel").classList.toggle("active");
 }
 
+// SOM AO CLICAR
+function playSound() {
+  const audio = new Audio("https://freesound.org/data/previews/341/341695_6245054-lq.mp3");
+  audio.volume = 0.3;
+  audio.play();
+}
+
 // CANVAS
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
-
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
@@ -181,48 +218,32 @@ class Particle {
     this.speedX = Math.random() - 0.5;
     this.speedY = Math.random() - 0.5;
   }
-
   update() {
     this.x += this.speedX;
     this.y += this.speedY;
-
     if (this.x > canvas.width) this.x = 0;
     if (this.y > canvas.height) this.y = 0;
   }
-
   draw() {
     ctx.fillStyle = "#00ffff";
     ctx.beginPath();
-    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
     ctx.fill();
   }
 }
 
 function init() {
   particles = [];
-  for (let i = 0; i < 100; i++) {
-    particles.push(new Particle());
-  }
+  for(let i=0;i<100;i++){particles.push(new Particle());}
 }
-
 function animate() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  particles.forEach(p => {
-    p.update();
-    p.draw();
-  });
-
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles.forEach(p=>{p.update();p.draw();});
   requestAnimationFrame(animate);
 }
-
 init();
 animate();
-
-window.addEventListener("resize", () => {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-});
+window.addEventListener("resize",()=>{canvas.width=window.innerWidth;canvas.height=window.innerHeight;});
 </script>
 
 </body>

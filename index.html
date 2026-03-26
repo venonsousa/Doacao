@@ -3,12 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Canvas Background</title>
+<title>Partículas Animadas</title>
 
 <style>
   body {
     margin: 0;
     overflow: hidden;
+    background: #0a0a0a;
     font-family: Arial, sans-serif;
     color: white;
   }
@@ -28,43 +29,38 @@
 
   h1 {
     font-size: 40px;
-  }
-
-  button {
-    padding: 12px 25px;
-    border: none;
-    border-radius: 30px;
-    background: #00c3ff;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 20px;
-  }
-
-  button:hover {
-    background: #0099cc;
+    letter-spacing: 2px;
   }
 </style>
 </head>
 
 <body>
 
-<canvas id="bg"></canvas>
+<canvas id="canvas"></canvas>
 
 <div class="content">
-  <h1>✨ Fundo com Canvas</h1>
-  <p>Efeito partículas animadas</p>
-  <button>Clique aqui</button>
+  <h1>✨ Partículas em Movimento</h1>
+  <p>Fundo animado com interação do mouse</p>
 </div>
 
 <script>
-const canvas = document.getElementById("bg");
+const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 let particles = [];
+const mouse = {
+  x: null,
+  y: null,
+  radius: 120
+};
+
+window.addEventListener("mousemove", (event) => {
+  mouse.x = event.x;
+  mouse.y = event.y;
+});
 
 class Particle {
   constructor() {
@@ -79,6 +75,17 @@ class Particle {
     this.x += this.speedX;
     this.y += this.speedY;
 
+    // interação com o mouse
+    let dx = this.x - mouse.x;
+    let dy = this.y - mouse.y;
+    let distance = Math.sqrt(dx * dx + dy * dy);
+
+    if (distance < mouse.radius) {
+      this.x += dx / 10;
+      this.y += dy / 10;
+    }
+
+    // limites da tela
     if (this.x > canvas.width) this.x = 0;
     if (this.x < 0) this.x = canvas.width;
     if (this.y > canvas.height) this.y = 0;
@@ -86,7 +93,7 @@ class Particle {
   }
 
   draw() {
-    ctx.fillStyle = "white";
+    ctx.fillStyle = "#00ffff";
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
     ctx.fill();
@@ -95,8 +102,27 @@ class Particle {
 
 function init() {
   particles = [];
-  for (let i = 0; i < 120; i++) {
+  for (let i = 0; i < 150; i++) {
     particles.push(new Particle());
+  }
+}
+
+function connect() {
+  for (let a = 0; a < particles.length; a++) {
+    for (let b = a; b < particles.length; b++) {
+      let dx = particles[a].x - particles[b].x;
+      let dy = particles[a].y - particles[b].y;
+      let distance = dx * dx + dy * dy;
+
+      if (distance < 8000) {
+        ctx.strokeStyle = "rgba(0,255,255,0.1)";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(particles[a].x, particles[a].y);
+        ctx.lineTo(particles[b].x, particles[b].y);
+        ctx.stroke();
+      }
+    }
   }
 }
 
@@ -110,25 +136,6 @@ function animate() {
 
   connect();
   requestAnimationFrame(animate);
-}
-
-function connect() {
-  for (let a = 0; a < particles.length; a++) {
-    for (let b = a; b < particles.length; b++) {
-      let dx = particles[a].x - particles[b].x;
-      let dy = particles[a].y - particles[b].y;
-      let distance = dx * dx + dy * dy;
-
-      if (distance < 10000) {
-        ctx.strokeStyle = "rgba(255,255,255,0.1)";
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(particles[a].x, particles[a].y);
-        ctx.lineTo(particles[b].x, particles[b].y);
-        ctx.stroke();
-      }
-    }
-  }
 }
 
 init();

@@ -13,7 +13,6 @@ body {
   overflow: hidden;
 }
 
-/* CANVAS */
 canvas {
   position: fixed;
   top: 0;
@@ -21,7 +20,6 @@ canvas {
   z-index: -1;
 }
 
-/* MENU */
 .sidebar {
   position: fixed;
   left: 0;
@@ -52,7 +50,6 @@ canvas {
   display: inline-block;
 }
 
-/* BOTÕES */
 .menu-btn {
   margin-top: 20px;
   padding: 12px;
@@ -72,7 +69,6 @@ canvas {
   transition: box-shadow 0.3s;
 }
 
-/* ÍCONE ANIMADO */
 .menu-btn .icon {
   margin-right: 10px;
   width: 20px;
@@ -83,18 +79,15 @@ canvas {
   animation: spin 1s linear infinite;
 }
 
-/* SPIN KEYFRAME */
 @keyframes spin {
   0% { transform: rotate(0deg);}
   100% { transform: rotate(360deg);}
 }
 
-/* HOVER NEON */
 .menu-btn:hover {
   box-shadow: 0 0 15px #00ffff, 0 0 30px #00ffff inset;
 }
 
-/* PAINÉIS */
 .panel {
   position: fixed;
   right: -100%;
@@ -113,7 +106,6 @@ canvas {
   right: 0;
 }
 
-/* GRID */
 .grid {
   display: flex;
   flex-wrap: wrap;
@@ -121,7 +113,6 @@ canvas {
   counter-reset: card;
 }
 
-/* CARDS */
 .card {
   position: relative;
   width: 260px;
@@ -135,6 +126,7 @@ canvas {
   align-items: center;
   box-sizing: border-box;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .card::before {
@@ -156,16 +148,41 @@ canvas {
   box-shadow: 0 0 25px rgba(0,255,255,0.4);
 }
 
-.card span {
-  font-size: 16px;
-  text-align: center;
-}
-
 .card img {
   max-width: 100%;
   max-height: 100%;
   object-fit: cover;
   border-radius: 10px;
+}
+
+/* MODAL */
+#modal {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.85);
+  justify-content: center;
+  align-items: center;
+}
+
+#modal img {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 10px;
+}
+
+#modal .close-btn {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 28px;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
 }
 </style>
 </head>
@@ -173,7 +190,6 @@ canvas {
 
 <canvas id="canvas"></canvas>
 
-<!-- MENU -->
 <div class="sidebar">
   <div class="profile">
     <img src="https://i.pravatar.cc/150" alt="Foto de Perfil">
@@ -182,22 +198,18 @@ canvas {
   </div>
 
   <button class="menu-btn" onclick="openGFS(); playSound();">
-    <div class="icon" aria-hidden="true"></div>
-    FUNDOS GFS
+    <div class="icon" aria-hidden="true"></div> FUNDOS GFS
   </button>
 
   <button class="menu-btn" onclick="pcBack();">
-    <div class="icon" aria-hidden="true"></div>
-    PCBACK
+    <div class="icon" aria-hidden="true"></div> PCBACK
   </button>
 
   <button class="menu-btn" onclick="openStatic();">
-    <div class="icon" aria-hidden="true"></div>
-    FUNDOS ESTÁTICOS
+    <div class="icon" aria-hidden="true"></div> FUNDOS ESTÁTICOS
   </button>
 </div>
 
-<!-- PAINEL FUNDOS GFS -->
 <div class="panel" id="panelGFS">
   <div class="grid">
     <div class="card" id="cardGFS1"><span>Item</span></div>
@@ -207,7 +219,6 @@ canvas {
   </div>
 </div>
 
-<!-- PAINEL FUNDOS ESTÁTICOS -->
 <div class="panel" id="panelStatic">
   <div class="grid">
     <div class="card"><span>Item</span></div>
@@ -217,15 +228,19 @@ canvas {
   </div>
 </div>
 
+<!-- MODAL -->
+<div id="modal">
+  <span class="close-btn" onclick="closeModal()">×</span>
+  <img id="modalImg" src="">
+</div>
+
 <script>
-// SOM AO CLICAR
 function playSound() {
   const audio = new Audio("https://freesound.org/data/previews/341/341695_6245054-lq.mp3");
   audio.volume = 0.3;
   audio.play();
 }
 
-// BOTÃO PCBACK
 function pcBack() {
   document.getElementById("panelGFS").classList.remove("active");
   document.getElementById("panelStatic").classList.remove("active");
@@ -236,8 +251,14 @@ function openGFS() {
   document.getElementById("panelGFS").classList.add("active");
   document.getElementById("panelStatic").classList.remove("active");
 
-  // Adiciona GIF no primeiro card
-  document.getElementById("cardGFS1").innerHTML = '<img src="https://xatimg.com/image/2z709uX4q7li.gif" alt="GIF Fundos">';
+  // Coloca GIF no primeiro card
+  const card = document.getElementById("cardGFS1");
+  card.innerHTML = '<img src="https://xatimg.com/image/2z709uX4q7li.gif" alt="GIF Fundos">';
+  
+  // Adiciona click para abrir modal
+  card.onclick = function() {
+    openModal("https://xatimg.com/image/2z709uX4q7li.gif");
+  };
 }
 
 // ABRIR FUNDOS ESTÁTICOS
@@ -245,6 +266,16 @@ function openStatic() {
   document.getElementById("panelStatic").classList.add("active");
   document.getElementById("panelGFS").classList.remove("active");
   resetParticlesStatic();
+}
+
+// MODAL
+function openModal(src) {
+  document.getElementById("modal").style.display = "flex";
+  document.getElementById("modalImg").src = src;
+}
+
+function closeModal() {
+  document.getElementById("modal").style.display = "none";
 }
 
 // CANVAS
@@ -258,7 +289,6 @@ function resizeCanvas() {
 window.addEventListener("resize", resizeCanvas);
 resizeCanvas();
 
-// PARTICULAS
 let particles = [];
 
 class Particle {
@@ -305,8 +335,8 @@ function animateParticles() {
   particles.forEach(p => { p.update(); p.draw(); });
   requestAnimationFrame(animateParticles);
 }
-
 animateParticles();
 </script>
+
 </body>
 </html>
